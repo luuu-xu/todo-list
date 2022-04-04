@@ -1,0 +1,321 @@
+body {
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.header-container {
+    background-color: #565656;
+    color: white;
+    min-height: 80px;
+    font-size: 3rem;
+    /* font-weight: bold; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    letter-spacing: .5rem;
+}
+
+.main-container {
+    height: calc(100vh - 80px);
+    display: grid;
+    grid-template-columns: 20% 80%;
+}
+
+.projects-container {
+    background-color: #f2f2f2;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.projects-header {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.project {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.project-title {
+    font-size: 1.5rem;
+    margin-top: 20px;
+    max-width: 70%;
+}
+
+.project-title:hover {
+    cursor: pointer;
+}
+
+.project.active .project-title {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+#project-rename-input {
+    margin-top: 20px;
+    font-family: inherit;
+    font-size: 1.5rem;
+    border: none;
+    max-width: 70%;
+    background-color: #f2f2f2;
+    border-bottom: 2px dotted black;
+    outline: none;
+}
+
+#project-rename-btn {
+    margin-left: 20px;
+    padding: 0;
+    border: 2px solid transparent;
+    background-color: #f2f2f2;
+    font-size: 1rem;
+    width: 2rem;
+    height: 2rem;
+}
+
+#project-rename-btn:hover {
+    font-weight: bold;
+    outline: none;
+    cursor: pointer;
+}
+
+#project-rename-btn:focus {
+    outline: none;
+    border: 2px dotted black;
+}
+
+#project-delete-btn {
+    margin-left: 20px;
+    padding: 0;
+    border: 2px solid transparent;
+    background-color: #f2f2f2;
+    font-size: 1.5rem;
+    height: 2rem;
+    width: 2rem;
+}
+
+#project-delete-btn:hover {
+    font-weight: bold;
+    outline: none;
+    cursor: pointer;
+}
+
+#project-delete-btn:focus {
+    outline: none;
+    border: 2px dotted black;
+}
+
+.new-project-container {
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+#new-project-title {
+    font-family: inherit;
+    font-size: 1.5rem;
+    border: none;
+    max-width: 70%;
+    background-color: #f2f2f2;
+}
+
+#new-project-title:focus {
+    border-bottom: 2px dotted black;
+    outline: none;
+}
+
+#new-project-btn {
+    margin-left: 20px;
+    padding: 0;
+    border: 2px solid transparent;
+    background-color: #f2f2f2;
+    font-size: 1.5rem;
+    height: 2rem;
+    width: 2rem;
+}
+
+#new-project-btn:hover {
+    font-weight: bold;
+    outline: none;
+    cursor: pointer;
+}
+
+#new-project-btn:focus {
+    outline: none;
+    border: 2px dotted black;
+}
+
+.todos-container {
+    background-color: white;
+    padding: 30px;
+    padding-left: 10%;
+    display: flex;
+    flex-direction: column;
+}
+
+.todos-header {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.todos-main {
+    width: 100%;
+}
+
+.todo {
+    margin-top: 20px;
+    padding: .5rem;
+    /* background-color: #f2f2f2; */
+    border: 1px solid #565656;
+    width: clamp(300px, 50%, 800px);
+    display: flex;
+    justify-content: space-between;
+}
+
+.todo-title {
+    font-size: 1rem;
+    color: black;
+    padding: .2rem;
+}
+
+.todo-title:hover {
+    cursor: pointer;
+}
+
+.todo-detail-container {
+    padding: .5rem;
+    border: 1px solid #565656;
+    border-top-width: 0;
+    width: clamp(300px, 50%, 800px);
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+label {
+    padding: .2rem;
+    font-weight: bold;
+    width: 80%;
+}
+
+.todo-detail-input {
+    font-family: inherit;
+    font-size: 1rem;
+    color: #565656;
+    width: 100%;
+    /* height: 1.2rem; */
+    padding: .2rem;
+    border: none;
+    display: block;
+    border: 2px solid transparent;
+    border-bottom: 2px dotted #565656;
+}
+
+.todo-detail-input:focus {
+    color: black;
+    outline: none;
+    border: 2px dotted black;
+}
+
+.todo-detail-title-delete {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.todo-detail-due-priority {
+    display: flex;
+    width: 83%;
+    padding: .2rem;
+    justify-content: space-between;
+}
+
+#todo-detail-due {
+    width: fit-content;
+}
+
+#todo-detail-priority {
+    font-size: 1rem;
+    display: block;
+}
+
+.todo.checked {
+    text-decoration: line-through;
+}
+
+#todo-check-btn,
+#todo-detail-delete-btn {
+    margin: 0 10px;
+    padding: 0;
+    border: 2px solid transparent;
+    background-color: white;
+    font-size: .8rem;
+    height: 1.3rem;
+    width: 1.3rem;
+}
+
+#todo-detail-delete-btn {
+    font-size: 1rem;
+}
+
+#todo-check-btn:hover,
+#todo-detail-delete-btn:hover {
+    font-weight: bold;
+    outline: none;
+    cursor: pointer;
+}
+
+#todo-check-btn:focus,
+#todo-detail-delete-btn:focus {
+    outline: none;
+    border: 2px dotted black;
+}
+
+.new-todo-container {
+    border: 2px dotted #565656;
+    /* border: 1px solid #565656; */
+    display: flex;
+    justify-content: space-between;
+}
+
+#new-todo-title {
+    font-family: inherit;
+    font-size: 1rem;
+    border: none;
+    border-bottom: 2px solid transparent;
+    width: 80%;
+}
+
+#new-todo-title:focus {
+    outline: none;
+    border-bottom: 2px dotted black;
+}
+
+#new-todo-btn {
+    margin: 0 10px;
+    padding: 0;
+    border: 2px solid transparent;
+    background-color: white;
+    font-size: 1rem;
+}
+
+#new-todo-btn:hover {
+    font-weight: bold;
+    outline: none;
+    cursor: pointer;
+}
+
+#new-todo-btn:focus {
+    outline: none;
+    border: 2px dotted black;
+}
