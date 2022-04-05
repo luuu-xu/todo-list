@@ -1,5 +1,5 @@
 import Todo from './todo';
-import {Project} from './project';
+import {Project, ProjectList} from './project';
 import projectList from './welcome';
 
 const dom = (() => {
@@ -94,6 +94,10 @@ const projectSide = (() => {
             const newProject = Project(newProjectInput.value || 'New Project');
             newProjectInput.value = '';
             projectList.addProject(newProject);
+
+            // save new projectList to localStorage
+            localStorage.setItem('projectList', JSON.stringify(projectList));
+
             const projectsMainDiv = document.querySelector('.projects-main');
             const parentDiv = projectsMainDiv.parentNode;
             parentDiv.replaceChild(_appendProjects(), projectsMainDiv);
@@ -120,6 +124,9 @@ const projectSide = (() => {
             const currentProjectIndex = activeProjectDiv.id[activeProjectDiv.id.length - 1];
             projectList.deleteProject(Number(currentProjectIndex));
 
+            // save new projectList to localStorage
+            localStorage.setItem('projectList', JSON.stringify(projectList));
+
             // restart projectSide, if there is a project remaining, restart todoSide too;
             // if no projects left, restart todoSide saying "please add a new project"
             const projectsMainDiv = document.querySelector('.projects-main');
@@ -139,7 +146,7 @@ const projectSide = (() => {
     };
     const _appendProjects = () => {
         const projectsMainDiv = dom.createDiv('projects-main');
-
+        
         const projects = projectList.getProjects();
         projects.forEach(project => {
             // append projects currently in projectList into projectDiv
@@ -174,6 +181,11 @@ const projectSide = (() => {
                     // add eventlistener for projectRenameBtn to update the project title
                     projectRenameBtn.addEventListener('click', () => {
                         project.updateTitle(projectRenameInput.value || `${project.getTitle()}`);
+
+                        // save new projectList to localStorage
+                        projectList.projects[projectDiv.id[projectDiv.id.length - 1]].title = projectRenameInput.value || `${project.getTitle()}`;
+                        localStorage.setItem('projectList', JSON.stringify(projectList));  
+
                         // restart projectSide + todoSide
                         const projectsMainDiv = document.querySelector('.projects-main');
                         const parentDiv = projectsMainDiv.parentNode;
@@ -233,6 +245,9 @@ const todoSide = (() => {
             const parentDiv = todosMainDiv.parentNode;
             parentDiv.replaceChild(_appendTodos(currentProject), todosMainDiv);
             document.querySelector('#new-todo-title').focus();
+
+            // save new projectList to localStorage
+            localStorage.setItem('projectList', JSON.stringify(projectList));
         });
 
         return newTodoDiv;
@@ -244,7 +259,9 @@ const todoSide = (() => {
         todos.forEach(todo => {
             const todoContainerDiv = dom.createDiv('todo-container');
             const todoDiv = dom.createDiv('todo');
+
             if (todo.getCheckStatus()) {todoDiv.classList.add('checked')};
+
             todoDiv.id = `todo-${todo.getIndex()}`;
             const todoTitleDiv = dom.createDiv('todo-title');
             todoTitleDiv.innerHTML = todo.getTitle();
@@ -259,13 +276,32 @@ const todoSide = (() => {
                 if (todoCheckBtn.parentElement.classList.contains('expanded')) {
                     todoDiv.classList.toggle('checked');
                     todo.toggleCheck();
+
+                    // save new projectList to localStorage
+                    const activeProjectIndex = document.querySelector('.active').id[document.querySelector('.active').id.length - 1];
+                    const todoIndex = todoCheckBtn.parentElement.id[todoCheckBtn.parentElement.id.length - 1];
+                    if (!projectList.projects[activeProjectIndex].todoList[todoIndex].checked) {
+                        projectList.projects[activeProjectIndex].todoList[todoIndex].checked = true;
+                    } else {
+                        projectList.projects[activeProjectIndex].todoList[todoIndex].checked = false;
+                    };
+                    localStorage.setItem('projectList', JSON.stringify(projectList)); 
+
                     // save the details of the todo when closing it, by updating them, and restart todoSide, restart todoSide with updated details;
                     todoDiv.classList.toggle('expanded');
                     const todoDetailDiv = document.querySelector(`#todo-detail-${todoDiv.id[todoDiv.id.length - 1]}`);
-                    todo.updateTitle(document.querySelector('#todo-detail-title').value);
-                    todo.updateDescription(document.querySelector('#todo-detail-description').value);
-                    todo.updateDue(document.querySelector('#todo-detail-due').value);
-                    todo.updatePriority(document.querySelector('#todo-detail-priority').value);
+                    todo.updateTitle(document.querySelector(`#todo-detail-${todoDiv.id[todoDiv.id.length - 1]} #todo-detail-title`).value);
+                    todo.updateDescription(document.querySelector(`#todo-detail-${todoDiv.id[todoDiv.id.length - 1]} #todo-detail-description`).value);
+                    todo.updateDue(document.querySelector(`#todo-detail-${todoDiv.id[todoDiv.id.length - 1]} #todo-detail-due`).value);
+                    todo.updatePriority(document.querySelector(`#todo-detail-${todoDiv.id[todoDiv.id.length - 1]} #todo-detail-priority`).value)
+
+                    // save new projectList to localStorage
+                    projectList.projects[activeProjectIndex].todoList[todoIndex].title = document.querySelector(`#todo-detail-${todoDiv.id[todoDiv.id.length - 1]} #todo-detail-title`).value;
+                    projectList.projects[activeProjectIndex].todoList[todoIndex].description = document.querySelector(`#todo-detail-${todoDiv.id[todoDiv.id.length - 1]} #todo-detail-description`).value;
+                    projectList.projects[activeProjectIndex].todoList[todoIndex].due = document.querySelector(`#todo-detail-${todoDiv.id[todoDiv.id.length - 1]} #todo-detail-due`).value;
+                    projectList.projects[activeProjectIndex].todoList[todoIndex].priority = document.querySelector(`#todo-detail-${todoDiv.id[todoDiv.id.length - 1]} #todo-detail-priority`).value;
+                    localStorage.setItem('projectList', JSON.stringify(projectList)); 
+
                     const currentProjectDiv = document.querySelector('.active');
                     const currentProjectIndex = currentProjectDiv.id[currentProjectDiv.id.length - 1];
                     initialize.restartTodoSide(currentProjectIndex);
@@ -273,6 +309,16 @@ const todoSide = (() => {
                 } else {
                     todoDiv.classList.toggle('checked');
                     todo.toggleCheck();
+
+                    // save new projectList to localStorage
+                    const activeProjectIndex = document.querySelector('.active').id[document.querySelector('.active').id.length - 1];
+                    const todoIndex = todoCheckBtn.parentElement.id[todoCheckBtn.parentElement.id.length - 1];
+                    if (!projectList.projects[activeProjectIndex].todoList[todoIndex].checked) {
+                        projectList.projects[activeProjectIndex].todoList[todoIndex].checked = true;
+                    } else {
+                        projectList.projects[activeProjectIndex].todoList[todoIndex].checked = false;
+                    };
+                    localStorage.setItem('projectList', JSON.stringify(projectList));  
                 };
             });
 
@@ -294,6 +340,10 @@ const todoSide = (() => {
                             const currentProjectIndex = currentProjectDiv.id[currentProjectDiv.id.length - 1];
                             const currentProject = projectList.getProjects()[currentProjectIndex];   
                             currentProject.deleteTodo(todo);
+
+                            // save new projectList to localStorage
+                            localStorage.setItem('projectList', JSON.stringify(projectList));
+
                             // restart todoSide with updated details
                             initialize.restartTodoSide(currentProjectIndex);
                             todoContainerDiv.removeChild(todoDetailDiv);
@@ -303,10 +353,19 @@ const todoSide = (() => {
                         // save the details of the todo when closing it, by updating them, and restart todoSide;
                         todoDiv.classList.toggle('expanded');
                         const todoDetailDiv = document.querySelector(`#todo-detail-${todoDiv.id[todoDiv.id.length - 1]}`);
-                        todo.updateTitle(document.querySelector('#todo-detail-title').value);
-                        todo.updateDescription(document.querySelector('#todo-detail-description').value);
-                        todo.updateDue(document.querySelector('#todo-detail-due').value);
-                        todo.updatePriority(document.querySelector('#todo-detail-priority').value)
+                        todo.updateTitle(document.querySelector(`#todo-detail-${todoDiv.id[todoDiv.id.length - 1]} #todo-detail-title`).value);
+                        todo.updateDescription(document.querySelector(`#todo-detail-${todoDiv.id[todoDiv.id.length - 1]} #todo-detail-description`).value);
+                        todo.updateDue(document.querySelector(`#todo-detail-${todoDiv.id[todoDiv.id.length - 1]} #todo-detail-due`).value);
+                        todo.updatePriority(document.querySelector(`#todo-detail-${todoDiv.id[todoDiv.id.length - 1]} #todo-detail-priority`).value)
+
+                        // save new projectList to localStorage
+                        const activeProjectIndex = document.querySelector('.active').id[document.querySelector('.active').id.length - 1];
+                        const todoIndex = todoCheckBtn.parentElement.id[todoCheckBtn.parentElement.id.length - 1];
+                        projectList.projects[activeProjectIndex].todoList[todoIndex].title = document.querySelector(`#todo-detail-${todoDiv.id[todoDiv.id.length - 1]} #todo-detail-title`).value;
+                        projectList.projects[activeProjectIndex].todoList[todoIndex].description = document.querySelector(`#todo-detail-${todoDiv.id[todoDiv.id.length - 1]} #todo-detail-description`).value;
+                        projectList.projects[activeProjectIndex].todoList[todoIndex].due = document.querySelector(`#todo-detail-${todoDiv.id[todoDiv.id.length - 1]} #todo-detail-due`).value;
+                        projectList.projects[activeProjectIndex].todoList[todoIndex].priority = document.querySelector(`#todo-detail-${todoDiv.id[todoDiv.id.length - 1]} #todo-detail-priority`).value;
+                        localStorage.setItem('projectList', JSON.stringify(projectList)); 
 
                         // restart todoSide with updated details
                         const currentProjectDiv = document.querySelector('.active');

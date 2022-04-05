@@ -18,9 +18,11 @@ const Project = (title) => {
         });
     };
     const deleteTodo = (targetTodo) => {
-        todoList = todoList.filter(todo => todo.getIndex() !== targetTodo.getIndex());
-    }
-    return {getIndex, updateIndex, getTitle, updateTitle, getTodos, addTodo, addTodos, deleteTodo};
+        // todoList = todoList.filter(todo => todo.getIndex() !== targetTodo.getIndex());
+        todoList.splice(todoList.filter(todo => todo.getIndex() === targetTodo.getIndex())[0].getIndex(), 1);
+    };
+    return {getIndex, updateIndex, getTitle, updateTitle, getTodos, addTodo, addTodos, deleteTodo,
+            todoList, todoIndex, title, index};
 };
 
 const ProjectList = () => {
@@ -34,9 +36,11 @@ const ProjectList = () => {
     };
     const getProjects = () => projects;
     const deleteProject = (i) => {
-        projects = projects.filter(project => project.getIndex() !== i);
+        // projects = projects.filter(project => project.getIndex() !== i);
+        projects.splice(projects.filter(project => project.getIndex() === i)[0].getIndex(), 1);
     };
-    return {getProjectIndex, addProject, getProjects, deleteProject};
+    return {getProjectIndex, addProject, getProjects, deleteProject,
+            projects, projectIndex};
 };
 
 export {Project, ProjectList};
