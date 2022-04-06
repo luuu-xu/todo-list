@@ -1,4 +1,4 @@
 import './style.css';
-import initialize  from './dom';
+import initialize from './initialize';
 
 initialize.start();

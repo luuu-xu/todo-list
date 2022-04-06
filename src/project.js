@@ -3,9 +3,9 @@ const Project = (title) => {
     let todoIndex = 0;
     let index;
     const getIndex = () => index;
-    const updateIndex = (i) => {index = i};
+    const updateIndex = (i) => index = i;
     const getTitle = () => title;
-    const updateTitle = (i) => {title = i};
+    const updateTitle = (i) => title = i;
     const getTodos = () => todoList;
     const addTodo = (todo) => {
         todo.updateIndex(todoIndex);
@@ -18,7 +18,6 @@ const Project = (title) => {
         });
     };
     const deleteTodo = (targetTodo) => {
-        // todoList = todoList.filter(todo => todo.getIndex() !== targetTodo.getIndex());
         todoList.splice(todoList.filter(todo => todo.getIndex() === targetTodo.getIndex())[0].getIndex(), 1);
     };
     return {getIndex, updateIndex, getTitle, updateTitle, getTodos, addTodo, addTodos, deleteTodo,
@@ -36,7 +35,6 @@ const ProjectList = () => {
     };
     const getProjects = () => projects;
     const deleteProject = (i) => {
-        // projects = projects.filter(project => project.getIndex() !== i);
         projects.splice(projects.filter(project => project.getIndex() === i)[0].getIndex(), 1);
     };
     return {getProjectIndex, addProject, getProjects, deleteProject,
