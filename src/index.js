@@ -1,4 +1,4 @@
-import './style.css';
-import initialize from './initialize';
+import "./style.css";
+import initialize from "./initialize";
 
 initialize.start();
