@@ -1,7 +1,7 @@
 import dom from "./dom";
 import initialize from "./initialize";
 import projectList from "./localstorage";
-import Todo from "./todo";
+import Todo from "./Todo";
 
 const todoSide = (() => {
   const start = (projectIndex) => {

@@ -1,7 +1,7 @@
 import dom from "./dom";
 import initialize from "./initialize";
 import projectList from "./localstorage";
-import { Project } from "./project";
+import { Project } from "./Project";
 
 const projectSide = (() => {
   const start = () => {

@@ -1,5 +1,5 @@
-import Todo from "./todo";
-import { Project, ProjectList } from "./project";
+import Todo from "./Todo";
+import { Project, ProjectList } from "./Project";
 
 const welcome = (() => {
   const createWelcomeProjects = () => {
