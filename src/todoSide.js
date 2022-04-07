@@ -1,6 +1,7 @@
 import dom from "./dom";
 import initialize from "./initialize";
 import projectList from "./localstorage";
+import Todo from "./todo";
 
 const todoSide = (() => {
     const start = (projectIndex) => {
@@ -9,7 +10,7 @@ const todoSide = (() => {
     };
     const _headerDiv = (projectIndex) => {
         const headerDiv = dom.createDiv('todos-header');
-        const currentProject = projectList.getProjects().filter(project => project.getIndex() === Number(projectIndex))[0];
+        const currentProject = projectList.getProjects()[projectIndex];
         headerDiv.innerHTML = currentProject.getTitle();
         return headerDiv;
     };
@@ -44,15 +45,19 @@ const todoSide = (() => {
     };
     const _appendTodos = (project) => {
         const todosMainDiv = dom.createDiv('todos-main');
+
         // append project's todos into todos-main div
         const todos = project.getTodos();
+
+        let i = 0;
         todos.forEach(todo => {
             const todoContainerDiv = dom.createDiv('todo-container');
             const todoDiv = dom.createDiv('todo');
 
             if (todo.getCheckStatus()) {todoDiv.classList.add('checked');}
 
-            todoDiv.id = `todo-${todo.getIndex()}`;
+            todoDiv.id = `todo-${i}`;
+            i++;
             const todoTitleDiv = dom.createDiv('todo-title');
             todoTitleDiv.innerHTML = todo.getTitle();
             const todoCheckBtn = dom.createBtn('todo-check-btn');
@@ -114,6 +119,7 @@ const todoSide = (() => {
 
             // add eventlistner for todo to be expanded showing details and editing them, plus delete button;
             todoTitleDiv.addEventListener('click', () => {
+
                 // if not checked, todo can be expanded to show details
                 if (!todoTitleDiv.parentElement.classList.contains('checked')) {
                     if (!todoDiv.classList.contains('expanded')) {
@@ -124,19 +130,23 @@ const todoSide = (() => {
                         todoDetailTitleInput.focus();
 
                         // add eventlistener for todo delete button to delete the currently expanded todo;
-                        const todoDetailDeleteBtn = document.querySelector('#todo-detail-delete-btn');
-                        todoDetailDeleteBtn.addEventListener('click', () => {
-                            const currentProjectDiv = document.querySelector('.active');
-                            const currentProjectIndex = currentProjectDiv.id[currentProjectDiv.id.length - 1];
-                            const currentProject = projectList.getProjects()[currentProjectIndex];   
-                            currentProject.deleteTodo(todo);
+                        const todoDetailDeleteBtns = document.querySelectorAll('#todo-detail-delete-btn');
+                        todoDetailDeleteBtns.forEach(todoDetailDeleteBtn => {
+                            todoDetailDeleteBtn.addEventListener('click', () => {
+                                const currentProjectDiv = document.querySelector('.active');
+                                const currentProjectIndex = currentProjectDiv.id[currentProjectDiv.id.length - 1];
+                                const currentProject = projectList.getProjects()[currentProjectIndex];
+                                const currentTodoDiv = todoDetailDeleteBtn.parentElement.parentElement;
+                                const currentTodoIndex = currentTodoDiv.id[currentTodoDiv.id.length - 1];
+                                currentProject.deleteTodo(currentTodoIndex);
 
-                            // save new projectList to localStorage
-                            localStorage.setItem('projectList', JSON.stringify(projectList));
+                                // save new projectList to localStorage
+                                localStorage.setItem('projectList', JSON.stringify(projectList));
 
-                            // restart todoSide with updated details
-                            initialize.restartTodoSide(currentProjectIndex);
-                            todoContainerDiv.removeChild(todoDetailDiv);
+                                // restart todoSide with updated details
+                                initialize.restartTodoSide(currentProjectIndex);
+                                todoContainerDiv.removeChild(todoDetailDiv);
+                            });
                         });
 
                     } else {
@@ -190,7 +200,7 @@ const todoSide = (() => {
 
         todoSideDiv.append(_headerDiv(projectIndex));
 
-        const currentProject = projectList.getProjects().filter(project => project.getIndex() === Number(projectIndex))[0];
+        const currentProject = projectList.getProjects()[projectIndex];
 
         todoSideDiv.append(_appendTodos(currentProject));
         todoSideDiv.append(_newTodoDiv());

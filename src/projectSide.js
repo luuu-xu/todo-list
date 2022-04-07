@@ -1,6 +1,7 @@
 import dom from "./dom";
 import initialize from "./initialize";
 import projectList from "./localstorage";
+import { Project } from "./project";
 
 const projectSide = (() => {
     const start = () => {
@@ -33,7 +34,7 @@ const projectSide = (() => {
             const projectsMainDiv = document.querySelector('.projects-main');
             const parentDiv = projectsMainDiv.parentNode;
             parentDiv.replaceChild(_appendProjects(), projectsMainDiv);
-            const projectIndex = projectList.getProjectIndex() - 1;
+            const projectIndex = projectList.getProjects().length - 1;
             document.querySelectorAll('.project').forEach((project) => {project.classList.remove('active');});
             document.querySelector(`#project-${projectIndex}`).classList.add('active');
             addProjectDeleteBtn();
@@ -43,6 +44,7 @@ const projectSide = (() => {
         return newProjectDiv;
     };
     const addProjectDeleteBtn = () => {
+
         // if active, projectDiv has delete btn
         // remove other delete buttons first
         const deleteBtn = document.querySelector('#project-delete-btn');
@@ -54,19 +56,25 @@ const projectSide = (() => {
         activeProjectDiv.append(projectDeleteBtn);
         projectDeleteBtn.addEventListener('click', () => {
             const currentProjectIndex = activeProjectDiv.id[activeProjectDiv.id.length - 1];
-            projectList.deleteProject(Number(currentProjectIndex));
+            console.log(currentProjectIndex);
+            console.log(projectList);
+            projectList.deleteProject(currentProjectIndex);
+            console.log('after deleting project' + projectList.getProjects());
 
             // save new projectList to localStorage
             localStorage.setItem('projectList', JSON.stringify(projectList));
 
-            // restart projectSide, if there is a project remaining, restart todoSide too;
-            // if no projects left, restart todoSide saying "please add a new project"
+            // restart projectSide
+
             const projectsMainDiv = document.querySelector('.projects-main');
             const parentDiv = projectsMainDiv.parentNode;
             parentDiv.replaceChild(_appendProjects(), projectsMainDiv);
 
+            // if there is a project remaining, restart todoSide too with the last project active,
+            // if no projects are left, restart todoSide saying please add a new project
             if (projectList.getProjects().length !== 0) {
-                const projectIndex = projectList.getProjects()[projectList.getProjects().length - 1].getIndex();
+                const projectIndex = projectList.getProjects().length - 1;
+                // console.log('projectindex' + projectIndex);
                 document.querySelectorAll('.project').forEach((project) => {project.classList.remove('active');});
                 document.querySelector(`#project-${projectIndex}`).classList.add('active');
                 addProjectDeleteBtn();
@@ -80,10 +88,13 @@ const projectSide = (() => {
         const projectsMainDiv = dom.createDiv('projects-main');
         
         const projects = projectList.getProjects();
+        let i = 0;
         projects.forEach(project => {
+
             // append projects currently in projectList into projectDiv
             const projectDiv = dom.createDiv('project');
-            projectDiv.id = `project-${project.getIndex()}`;
+            projectDiv.id = `project-${i}`;
+            i++;
             const projectTitle = dom.createDiv('project-title');
             projectTitle.innerHTML = project.getTitle();
             projectDiv.append(projectTitle);
@@ -112,18 +123,21 @@ const projectSide = (() => {
 
                     // add eventlistener for projectRenameBtn to update the project title
                     projectRenameBtn.addEventListener('click', () => {
+                        const projectIndex = projectDiv.id[projectDiv.id.length - 1];
                         project.updateTitle(projectRenameInput.value || `${project.getTitle()}`);
 
                         // save new projectList to localStorage
-                        projectList.projects[projectDiv.id[projectDiv.id.length - 1]].title = projectRenameInput.value || `${project.getTitle()}`;
+                        // projectList.projects[projectDiv.id[projectDiv.id.length - 1]].title = projectRenameInput.value || `${project.getTitle()}`;
+                        projectList.projects[projectIndex].title = projectRenameInput.value || `${project.getTitle()}`;
+
                         localStorage.setItem('projectList', JSON.stringify(projectList));  
 
                         // restart projectSide + todoSide
                         const projectsMainDiv = document.querySelector('.projects-main');
                         const parentDiv = projectsMainDiv.parentNode;
                         parentDiv.replaceChild(_appendProjects(), projectsMainDiv);
-                        initialize.restartTodoSide(project.getIndex());
-                        document.querySelector(`#project-${project.getIndex()}`).classList.add('active');
+                        initialize.restartTodoSide(projectIndex);
+                        document.querySelector(`#project-${projectIndex}`).classList.add('active');
                         addProjectDeleteBtn();
                     });
                 }

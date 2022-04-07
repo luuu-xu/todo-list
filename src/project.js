@@ -17,8 +17,8 @@ const Project = (title) => {
             addTodo(todo);
         });
     };
-    const deleteTodo = (targetTodo) => {
-        todoList.splice(todoList.filter(todo => todo.getIndex() === targetTodo.getIndex())[0].getIndex(), 1);
+    const deleteTodo = (i) => {
+        todoList.splice(i, 1);
     };
     return {getIndex, updateIndex, getTitle, updateTitle, getTodos, addTodo, addTodos, deleteTodo,
             todoList, todoIndex, title, index};
@@ -33,9 +33,14 @@ const ProjectList = () => {
         projectIndex++;
         projects.push(project);
     };
+    const _addProjects = (projectss) => {
+        projectss.forEach(project => {
+            addProject(project);
+        });
+    };
     const getProjects = () => projects;
     const deleteProject = (i) => {
-        projects.splice(projects.filter(project => project.getIndex() === i)[0].getIndex(), 1);
+        projects.splice(i, 1);
     };
     return {getProjectIndex, addProject, getProjects, deleteProject,
             projects, projectIndex};
