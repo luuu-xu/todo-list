@@ -1,3 +1,4 @@
+import { auth } from "./firebase/auth";
 import dom from "./dom";
 import initialize from "./initialize";
 import projectList from "./localstorage";
@@ -165,15 +166,34 @@ const projectSide = (() => {
 
     return projectsMainDiv;
   };
-  const _createProjectSideDiv = () => {
-    const projectSideDiv = dom.createDiv("projects-container");
 
-    projectSideDiv.append(_headerDiv());
-    projectSideDiv.append(_appendProjects());
-    projectSideDiv.append(_newProjectDiv());
+  // const _auth = () => {
+  //   const authDiv = dom.createDiv("auth-container");
+  //   const userPic = dom.createDiv("auth-user-pic");
+  //   const userName = dom.createDiv("auth-user-name");
+  //   const signInBtn = dom.createBtn("auth-sign-in-btn");
+  //   signInBtn.innerHTML = "Sign-in";
+
+
+  //   authDiv.append(userPic, userName, signInBtn);
+
+  //   return authDiv;
+  // };
+
+  const _createProjectSideDiv = () => {
+    const projectSideDiv = dom.createDiv("project-side");
+
+    const projectsContainer = dom.createDiv("projects-container");
+    projectsContainer.append(_headerDiv());
+    projectsContainer.append(_appendProjects());
+    projectsContainer.append(_newProjectDiv());
+
+    projectSideDiv.append(projectsContainer);
+    projectSideDiv.append(auth());
 
     return projectSideDiv;
   };
+
   return { start, addProjectDeleteBtn };
 })();
 

@@ -1,6 +1,6 @@
 import welcome from "./welcome";
-import Todo from "./todo";
-import { Project, ProjectList } from "./project";
+import Todo from "./Todo";
+import { Project, ProjectList } from "./Project";
 
 let projectList;
 
