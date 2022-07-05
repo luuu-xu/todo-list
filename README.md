@@ -3,6 +3,8 @@ The Todo List project from The Odin Project.
 
 Live: https://luuu-xu.github.io/todo-list/
 
+Firebase live: https://todooo-ed49d.web.app
+
 The project is finally finished! 
 
 - The todo list app itself is not way too hard, but I did spend a lot of time sorting out how the dom elements are managed and appended, etc.
