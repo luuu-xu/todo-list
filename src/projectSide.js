@@ -1,8 +1,8 @@
-import { auth } from "./firebase/auth";
 import dom from "./dom";
 import initialize from "./initialize";
-import projectList from "./localstorage";
+import { projectList } from "./firebase/firestore";
 import { Project } from "./Project";
+import { auth } from "./firebase/auth";
 import { saveDataToFirestore } from "./firebase/firestore";
 
 const projectSide = (() => {
@@ -29,9 +29,6 @@ const projectSide = (() => {
       const newProject = Project(newProjectInput.value || "New Project");
       newProjectInput.value = "";
       projectList.addProject(newProject);
-
-      // save new projectList to localStorage
-      // localStorage.setItem("projectList", JSON.stringify(projectList));
 
       // Save new projectList to Firestore.
       saveDataToFirestore(projectList);
@@ -67,12 +64,7 @@ const projectSide = (() => {
     projectDeleteBtn.addEventListener("click", () => {
       const currentProjectIndex =
         activeProjectDiv.id[activeProjectDiv.id.length - 1];
-      console.log(currentProjectIndex);
-      console.log(projectList);
       projectList.deleteProject(currentProjectIndex);
-      console.log("after deleting project" + projectList.getProjects());
-
-      // save new projectList to localStorage
 
       // Save new projectList to Firestore.
       saveDataToFirestore(projectList);
@@ -87,7 +79,6 @@ const projectSide = (() => {
       // if no projects are left, restart todoSide saying please add a new project
       if (projectList.getProjects().length !== 0) {
         const projectIndex = projectList.getProjects().length - 1;
-        // console.log('projectindex' + projectIndex);
         document.querySelectorAll(".project").forEach((project) => {
           project.classList.remove("active");
         });
@@ -149,12 +140,8 @@ const projectSide = (() => {
               projectRenameInput.value || `${project.getTitle()}`
             );
 
-            // save new projectList to localStorage
-            // projectList.projects[projectDiv.id[projectDiv.id.length - 1]].title = projectRenameInput.value || `${project.getTitle()}`;
             projectList.projects[projectIndex].title =
               projectRenameInput.value || `${project.getTitle()}`;
-
-            // localStorage.setItem("projectList", JSON.stringify(projectList));
 
             // Save new projectList to Firestore.
             saveDataToFirestore(projectList);

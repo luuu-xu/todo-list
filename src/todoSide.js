@@ -1,8 +1,8 @@
 import dom from "./dom";
-import { saveDataToFirestore } from "./firebase/firestore";
 import initialize from "./initialize";
-import projectList from "./localstorage";
+import { projectList } from "./firebase/firestore";
 import Todo from "./Todo";
+import { saveDataToFirestore } from "./firebase/firestore";
 
 const todoSide = (() => {
   const start = (projectIndex) => {
@@ -32,19 +32,12 @@ const todoSide = (() => {
       const currentProjectDiv = document.querySelector(".active");
       const currentProjectIndex =
         currentProjectDiv.id[currentProjectDiv.id.length - 1];
-      const currentProject = projectList
-        .getProjects()
-        .filter(
-          (project) => project.getIndex() === Number(currentProjectIndex)
-        )[0];
+      const currentProject = projectList.projects[Number(currentProjectIndex)];
       currentProject.addTodo(newTodo);
       const todosMainDiv = document.querySelector(".todos-main");
       const parentDiv = todosMainDiv.parentNode;
       parentDiv.replaceChild(_appendTodos(currentProject), todosMainDiv);
       document.querySelector("#new-todo-title").focus();
-
-      // // save new projectList to localStorage
-      // localStorage.setItem("projectList", JSON.stringify(projectList));
       
       // Save new projectList to Firestore.
       saveDataToFirestore(projectList);
@@ -84,7 +77,6 @@ const todoSide = (() => {
           todoDiv.classList.toggle("checked");
           todo.toggleCheck();
 
-          // save new projectList to localStorage
           const activeProjectIndex =
             document.querySelector(".active").id[
               document.querySelector(".active").id.length - 1
@@ -105,7 +97,6 @@ const todoSide = (() => {
               todoIndex
             ].checked = false;
           }
-          // localStorage.setItem("projectList", JSON.stringify(projectList));
 
           // Save new projectList to Firestore.
           saveDataToFirestore(projectList);
@@ -144,7 +135,6 @@ const todoSide = (() => {
             ).value
           );
 
-          // save new projectList to localStorage
           projectList.projects[activeProjectIndex].todoList[todoIndex].title =
             document.querySelector(
               `#todo-detail-${
@@ -171,7 +161,6 @@ const todoSide = (() => {
               todoDiv.id[todoDiv.id.length - 1]
             } #todo-detail-priority`
           ).value;
-          // localStorage.setItem("projectList", JSON.stringify(projectList));
 
           // Save new projectList to Firestore.
           saveDataToFirestore(projectList);
@@ -185,7 +174,6 @@ const todoSide = (() => {
           todoDiv.classList.toggle("checked");
           todo.toggleCheck();
 
-          // save new projectList to localStorage
           const activeProjectIndex =
             document.querySelector(".active").id[
               document.querySelector(".active").id.length - 1
@@ -206,7 +194,6 @@ const todoSide = (() => {
               todoIndex
             ].checked = false;
           }
-          // localStorage.setItem("projectList", JSON.stringify(projectList));
 
           // Save new projectList to Firestore.
           saveDataToFirestore(projectList);
@@ -241,12 +228,6 @@ const todoSide = (() => {
                 const currentTodoIndex =
                   currentTodoDiv.id[currentTodoDiv.id.length - 1];
                 currentProject.deleteTodo(currentTodoIndex);
-
-                // save new projectList to localStorage
-                // localStorage.setItem(
-                //   "projectList",
-                //   JSON.stringify(projectList)
-                // );
 
                 // Save new projectList to Firestore.
                 saveDataToFirestore(projectList);
@@ -291,7 +272,6 @@ const todoSide = (() => {
               ).value
             );
 
-            // save new projectList to localStorage
             const activeProjectIndex =
               document.querySelector(".active").id[
                 document.querySelector(".active").id.length - 1
@@ -326,7 +306,6 @@ const todoSide = (() => {
                 todoDiv.id[todoDiv.id.length - 1]
               } #todo-detail-priority`
             ).value;
-            // localStorage.setItem("projectList", JSON.stringify(projectList));
 
             // Save new projectList to Firestore.
             saveDataToFirestore(projectList);
