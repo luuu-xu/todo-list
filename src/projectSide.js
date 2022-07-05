@@ -3,6 +3,7 @@ import dom from "./dom";
 import initialize from "./initialize";
 import projectList from "./localstorage";
 import { Project } from "./Project";
+import { saveDataToFirestore } from "./firebase/firestore";
 
 const projectSide = (() => {
   const start = () => {
@@ -30,7 +31,10 @@ const projectSide = (() => {
       projectList.addProject(newProject);
 
       // save new projectList to localStorage
-      localStorage.setItem("projectList", JSON.stringify(projectList));
+      // localStorage.setItem("projectList", JSON.stringify(projectList));
+
+      // Save new projectList to Firestore.
+      saveDataToFirestore(projectList);
 
       const projectsMainDiv = document.querySelector(".projects-main");
       const parentDiv = projectsMainDiv.parentNode;
@@ -69,7 +73,9 @@ const projectSide = (() => {
       console.log("after deleting project" + projectList.getProjects());
 
       // save new projectList to localStorage
-      localStorage.setItem("projectList", JSON.stringify(projectList));
+
+      // Save new projectList to Firestore.
+      saveDataToFirestore(projectList);
 
       // restart projectSide
 
@@ -148,7 +154,10 @@ const projectSide = (() => {
             projectList.projects[projectIndex].title =
               projectRenameInput.value || `${project.getTitle()}`;
 
-            localStorage.setItem("projectList", JSON.stringify(projectList));
+            // localStorage.setItem("projectList", JSON.stringify(projectList));
+
+            // Save new projectList to Firestore.
+            saveDataToFirestore(projectList);
 
             // restart projectSide + todoSide
             const projectsMainDiv = document.querySelector(".projects-main");
@@ -166,19 +175,6 @@ const projectSide = (() => {
 
     return projectsMainDiv;
   };
-
-  // const _auth = () => {
-  //   const authDiv = dom.createDiv("auth-container");
-  //   const userPic = dom.createDiv("auth-user-pic");
-  //   const userName = dom.createDiv("auth-user-name");
-  //   const signInBtn = dom.createBtn("auth-sign-in-btn");
-  //   signInBtn.innerHTML = "Sign-in";
-
-
-  //   authDiv.append(userPic, userName, signInBtn);
-
-  //   return authDiv;
-  // };
 
   const _createProjectSideDiv = () => {
     const projectSideDiv = dom.createDiv("project-side");

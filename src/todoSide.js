@@ -1,4 +1,5 @@
 import dom from "./dom";
+import { saveDataToFirestore } from "./firebase/firestore";
 import initialize from "./initialize";
 import projectList from "./localstorage";
 import Todo from "./Todo";
@@ -42,8 +43,12 @@ const todoSide = (() => {
       parentDiv.replaceChild(_appendTodos(currentProject), todosMainDiv);
       document.querySelector("#new-todo-title").focus();
 
-      // save new projectList to localStorage
-      localStorage.setItem("projectList", JSON.stringify(projectList));
+      // // save new projectList to localStorage
+      // localStorage.setItem("projectList", JSON.stringify(projectList));
+      
+      // Save new projectList to Firestore.
+      saveDataToFirestore(projectList);
+
     });
 
     return newTodoDiv;
@@ -100,7 +105,10 @@ const todoSide = (() => {
               todoIndex
             ].checked = false;
           }
-          localStorage.setItem("projectList", JSON.stringify(projectList));
+          // localStorage.setItem("projectList", JSON.stringify(projectList));
+
+          // Save new projectList to Firestore.
+          saveDataToFirestore(projectList);
 
           // save the details of the todo when closing it, by updating them, and restart todoSide, restart todoSide with updated details;
           todoDiv.classList.toggle("expanded");
@@ -163,7 +171,10 @@ const todoSide = (() => {
               todoDiv.id[todoDiv.id.length - 1]
             } #todo-detail-priority`
           ).value;
-          localStorage.setItem("projectList", JSON.stringify(projectList));
+          // localStorage.setItem("projectList", JSON.stringify(projectList));
+
+          // Save new projectList to Firestore.
+          saveDataToFirestore(projectList);
 
           const currentProjectDiv = document.querySelector(".active");
           const currentProjectIndex =
@@ -195,7 +206,10 @@ const todoSide = (() => {
               todoIndex
             ].checked = false;
           }
-          localStorage.setItem("projectList", JSON.stringify(projectList));
+          // localStorage.setItem("projectList", JSON.stringify(projectList));
+
+          // Save new projectList to Firestore.
+          saveDataToFirestore(projectList);
         }
       });
 
@@ -229,10 +243,13 @@ const todoSide = (() => {
                 currentProject.deleteTodo(currentTodoIndex);
 
                 // save new projectList to localStorage
-                localStorage.setItem(
-                  "projectList",
-                  JSON.stringify(projectList)
-                );
+                // localStorage.setItem(
+                //   "projectList",
+                //   JSON.stringify(projectList)
+                // );
+
+                // Save new projectList to Firestore.
+                saveDataToFirestore(projectList);
 
                 // restart todoSide with updated details
                 initialize.restartTodoSide(currentProjectIndex);
@@ -309,7 +326,10 @@ const todoSide = (() => {
                 todoDiv.id[todoDiv.id.length - 1]
               } #todo-detail-priority`
             ).value;
-            localStorage.setItem("projectList", JSON.stringify(projectList));
+            // localStorage.setItem("projectList", JSON.stringify(projectList));
+
+            // Save new projectList to Firestore.
+            saveDataToFirestore(projectList);
 
             // restart todoSide with updated details
             const currentProjectDiv = document.querySelector(".active");
